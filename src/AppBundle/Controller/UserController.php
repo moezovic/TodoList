@@ -22,7 +22,7 @@ class UserController extends Controller
      * @Route("/users/create", name="user_create")
      */
     public function createAction(Request $request)
-    {
+    {   
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
