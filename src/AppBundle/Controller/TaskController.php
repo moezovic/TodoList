@@ -24,6 +24,12 @@ class TaskController extends Controller
     public function createAction(Request $request)
     {
         $task = new Task();
+        
+        // Get authentified user
+        // tie the user to the task
+        $user = $this->getUser();
+        $task->setUser($user);
+
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
