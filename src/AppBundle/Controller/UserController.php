@@ -15,7 +15,13 @@ class UserController extends Controller
      */
     public function listAction()
     {
-        return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository('AppBundle:User')->findAll()]);
+        try {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+            return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository('AppBundle:User')->findAll()]);
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        
     }
 
     /**
