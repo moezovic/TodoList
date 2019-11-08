@@ -5,6 +5,7 @@
 {% block header_title %}<h1>Liste des utilisateurs</h1>{% endblock %}
 
 {% block body %}
+
     {% if users|length == 0 %}
         <div class="alert alert-warning" role="alert">
             Il n'y a pas encore d'utilisateur enregistré. <a href="{{ path('user_create') }}" class="btn btn-warning pull-right">Créer un utilisateur</a>
@@ -17,6 +18,7 @@
                     <th>#</th>
                     <th>Nom d'utilisateur</th>
                     <th>Adresse d'utilisateur</th>
+                    <th>Role</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -26,8 +28,14 @@
                         <th scope="row">{{ loop.index }}</th>
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
+                        <td>{{ user.roles|first}}</td>
                         <td>
-                            <a href="{{ path('user_edit', {'id' : user.id}) }}" class="btn btn-success btn-sm">Edit</a>
+                            <a href="{{ path('user_edit', {'id' : user.id}) }}" class="btn btn-success btn-sm">Modifier</a>
+                            {% if "ROLE_ADMIN" in user.roles %}
+                            <a href="{{ path('edit2user', {'id' : user.id}) }}" class="btn btn-success btn-sm">Mettre en utilisateur</a>
+                            {% else %}
+                            <a href="{{ path('edit2admin', {'id' : user.id}) }}" class="btn btn-success btn-sm">Mettre en administrateur</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

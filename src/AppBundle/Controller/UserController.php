@@ -59,10 +59,9 @@ class UserController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isValid() && $form->isSubmitted()) {
             $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
-
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");
@@ -71,5 +70,31 @@ class UserController extends Controller
         }
 
         return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
+    }
+    /**
+     * @Route("/users/{id}/edit/roleadmin", name="edit2admin")
+     */
+    public function edit_to_admin(User $user){
+
+        $user->setRoles(['ROLE_ADMIN']);
+        $em =$this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+        return $this->redirectToRoute('user_list');
+
+    }
+
+        /**
+     * @Route("/users/{id}/edit/roleuser", name="edit2user")
+     */
+    public function edit_to_user(User $user){
+
+
+        $user->setRoles(['ROLE_USER']);
+        $em =$this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+        return $this->redirectToRoute('user_list');
+
     }
 }
