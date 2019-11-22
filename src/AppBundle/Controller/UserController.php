@@ -19,7 +19,7 @@ class UserController extends Controller
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
             return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository('AppBundle:User')->findAll()]);
         } catch (\Throwable $th) {
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('/login');
         }
         
     }
@@ -44,7 +44,7 @@ class UserController extends Controller
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
-            return $this->redirectToRoute('user_list');
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
@@ -66,7 +66,7 @@ class UserController extends Controller
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 
-            return $this->redirectToRoute('user_list');
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
@@ -94,7 +94,7 @@ class UserController extends Controller
         $em =$this->getDoctrine()->getManager();
         $em->persist($user);
         $em->flush();
-        return $this->redirectToRoute('user_list');
+        return $this->redirectToRoute('homepage');
 
     }
 }
