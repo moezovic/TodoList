@@ -76,10 +76,16 @@ class TaskController extends Controller
      */
     public function toggleTaskAction(Task $task)
     {
-        $task->toggle(!$task->isDone());
+        $taskStatus = !$task->isDone();
+        $task->toggle($taskStatus);
         $this->getDoctrine()->getManager()->flush();
 
-        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+        if ($taskStatus) {
+            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+        }else {
+            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme comme non terminée.', $task->getTitle()));
+        }
+        
 
         return $this->redirectToRoute('task_list');
     }
