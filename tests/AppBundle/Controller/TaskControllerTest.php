@@ -28,13 +28,16 @@ class TaskControllerTest extends WebTestCase
     {
         
         $client = static::createClient();
-        $client->followRedirects();
+        
         $crawler = $client->request('GET', '/tasks');
 
 
-        $this->assertTrue(
-            $client->getResponse()->isRedirect('/login')
+        $this->assertEquals(
+            302, 
+            $client->getResponse()->getStatusCode()
         );
+        $client->followRedirects();
+       
     }
 
     public function testTaskCreation(){

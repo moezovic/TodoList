@@ -90,9 +90,11 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $client->submit($form);
 
+
         $this->assertTrue(
-          $client->getResponse()->isRedirect('homepage')
+          $client->getResponse()->isRedirect('/')
         );
+
         $this->assertGreaterThan(
             0,
             $crawler->filter('html:contains("L\'utilisateur a bien été modifié.")')->count()
@@ -126,7 +128,7 @@ class UserControllerTest extends WebTestCase
             'PHP_AUTH_USER' => 'user_1',
             'PHP_AUTH_PW'   => 'user_1',
         ]);
-        // $client->followRedirects();
+        $client->followRedirects();
         $crawler = $client->request('GET', '/users');
 
         $link = $crawler

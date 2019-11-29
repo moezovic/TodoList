@@ -19,7 +19,7 @@ class UserController extends Controller
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
             return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository('AppBundle:User')->findAll()]);
         } catch (\Throwable $th) {
-            return $this->redirectToRoute('/login');
+            return $this->redirectToRoute('login');
         }
         
     }
