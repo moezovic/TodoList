@@ -83,7 +83,7 @@ class TaskController extends Controller
         if ($taskStatus) {
             $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
         }else {
-            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme comme non terminée.', $task->getTitle()));
+            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme non terminée.', $task->getTitle()));
         }
         
 
@@ -97,7 +97,7 @@ class TaskController extends Controller
     {
         $logged_user = $this->getUser();
         $related_user = $task->getUser();
-        if ($logged_user == $related_user) {
+        if (($logged_user == $related_user) || (is_null($related_user) && in_array("ROLE_ADMIN",$logged_user->getRoles()))){
             $em = $this->getDoctrine()->getManager();
             $em->remove($task);
             $em->flush();

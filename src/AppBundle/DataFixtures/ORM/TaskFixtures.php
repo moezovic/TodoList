@@ -15,7 +15,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         $faker = Faker\Factory::create('fr_FR');
-        for ($i=0; $i < 20; $i++) { 
+        for ($i=0; $i < 10; $i++) { 
             $task = new Task();
             $task->setTitle($faker->sentence($nbWords = 6, $variableNbWords = true));
             $task->setContent($faker->paragraph($nbSentences = 3, $variableNbSentences = true));
