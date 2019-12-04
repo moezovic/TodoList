@@ -140,7 +140,7 @@ class UserControllerTest extends WebTestCase
 
         $this->assertEquals(
             1,
-            $crawler->filter('a:contains("Mettre en administrateur")')->count()
+            $crawler->filter('a:contains("Mettre en utilisateur")')->count()
         );
     }
     
