@@ -24,6 +24,12 @@ class TaskController extends Controller
     public function createAction(Request $request)
     {
         $task = new Task();
+        
+        // Get authentified user
+        // tie the user to the task
+        $user = $this->getUser();
+        $task->setUser($user);
+
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
@@ -70,10 +76,16 @@ class TaskController extends Controller
      */
     public function toggleTaskAction(Task $task)
     {
-        $task->toggle(!$task->isDone());
+        $taskStatus = !$task->isDone();
+        $task->toggle($taskStatus);
         $this->getDoctrine()->getManager()->flush();
 
-        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+        if ($taskStatus) {
+            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+        }else {
+            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme non terminée.', $task->getTitle()));
+        }
+        
 
         return $this->redirectToRoute('task_list');
     }
@@ -83,12 +95,19 @@ class TaskController extends Controller
      */
     public function deleteTaskAction(Task $task)
     {
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($task);
-        $em->flush();
+        $logged_user = $this->getUser();
+        $related_user = $task->getUser();
+        if (($logged_user == $related_user) || (is_null($related_user) && in_array("ROLE_ADMIN",$logged_user->getRoles()))){
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($task);
+            $em->flush();
+    
+            $this->addFlash('success', 'La tâche a bien été supprimée.');
+    
+            return $this->redirectToRoute('task_list');
+        }
 
-        $this->addFlash('success', 'La tâche a bien été supprimée.');
-
+        $this->addFlash('error', 'Vous n\'êtes pas autorisé à supprimer cette tache.');
         return $this->redirectToRoute('task_list');
     }
 }
