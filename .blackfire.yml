@@ -11,7 +11,7 @@ tests:
     assertions:
       - metrics.twig.compile.count == 0 # Pas de compilation en production
       - metrics.twig.attributes.get.count < 30 # Pas trop de logique dans les templates
-   "Tests de non régression entre 2 graph":
+  "Tests de non régression entre 2 graph":
     path: "/.*"
     assertions:
       - percent(main.memory) < 5% # Contrôle de la consommation de mémoire
