@@ -1,0 +1,18 @@
+# .blackfire.yml
+
+tests:
+  "Symfony behavior":
+    path: "/.*"
+    assertions:
+      - metrics.symfony.kernel.debug.count == 0 # En mode production
+      - metrics.symfony.yaml.reads.count == 0 # Mise en cache du YAML
+  "Twig behavior":
+    path: "/.*"
+    assertions:
+      - metrics.twig.compile.count == 0 # Pas de compilation en production
+      - metrics.twig.attributes.get.count < 30 # Pas trop de logique dans les templates
+  "Tests de non régression entre 2 graph":
+    path: "/.*"
+    assertions:
+      - percent(main.memory) < 5% # Contrôle de la consommation de mémoire
+      - diff(main.wall_time) < 0.1s # Contrôle du temps de chargement du script

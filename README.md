@@ -26,12 +26,16 @@ composer install
 
 3. Créer la base de donnes et mettez la à jour
 
-- php bin/console doctrine:database:create
-- php bin/console doctrine:schema:update –force
+```
+php bin/console doctrine:database:create
+php bin/console doctrine:schema:update –force
+```
 
 4. Charger les fixtures
 
-- php bin/console doctrine:fixtures:load
+```
+php bin/console doctrine:fixtures:load
+```
 
 ## Admin Authentification:
 
@@ -40,4 +44,20 @@ composer install
 	username: user_1
 	password: user_1
 
+```
+
+## Runining tests:
+
+- Create the fonctional or unit testing classes in the following folder _/tests/AppBundle/_
+- Create methods and assertions
+- Execute all your tests with the following command:
+
+```
+vendor/bin/phpunit
+```
+
+- target a specific testing class with the following command:
+
+```
+vendor/bin/phpunit --filter=TestClass.php
 ```
