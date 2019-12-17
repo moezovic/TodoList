@@ -70,6 +70,7 @@ class UserControllerTest extends WebTestCase
             'PHP_AUTH_USER' => 'user_2',
             'PHP_AUTH_PW'   => 'user_2',
         ]);
+        
 
         $kernel = self::bootKernel();
 
@@ -89,15 +90,16 @@ class UserControllerTest extends WebTestCase
 
 
         $crawler = $client->submit($form);
-
-
-        $this->assertTrue(
-          $client->getResponse()->isRedirect('/')
-        );
-
+        
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => 'edit-user',
+            'PHP_AUTH_PW'   => 'edit-password',
+        ]);
+        $client->followRedirects();
+        $crawler = $client->request('GET', '/tasks');
         $this->assertGreaterThan(
             0,
-            $crawler->filter('html:contains("L\'utilisateur a bien été modifié.")')->count()
+            $crawler->filter('html:contains("Marquer comme faite")')->count()
         );
 
     }
@@ -131,12 +133,17 @@ class UserControllerTest extends WebTestCase
         $client->followRedirects();
         $crawler = $client->request('GET', '/users');
 
+        // var_dump($client->getResponse()->getContent());
+        // die;
+
         $link = $crawler
         ->filter('a:contains("Mettre en utilisateur")')
         ->eq(0) 
         ->link()
         ;
         $crawler = $client->click($link);
+        
+        $crawler = $client->request('GET', '/users');
 
         $this->assertEquals(
             1,
